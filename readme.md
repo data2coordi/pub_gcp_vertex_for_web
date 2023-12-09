@@ -184,7 +184,7 @@ Centos9にPythonの実行環境、GCPにBigquery MLの実行環境を構築す�
 
 
 ### Setup Python virtul env 
-
+```
 cd ../env
 python3.9 -m venv scraping
 source ./scraping/bin/activate
@@ -197,14 +197,13 @@ pip install  html5lib
 
 deactivate
 
+```
+
 ### Python debug
 
 デバッグのコードも記載しておく
-#データの出力
-#vers(オブジェクト）
-#print(変数)
-#pprint(変数)
 
+```
 python -m pdb  exsample.py 
 #p(変数)
 #pp(変数)
@@ -212,8 +211,8 @@ python -m pdb  exsample.py
 #c #コンティニュー
 #pp(article[5].prettify())
 
+```
 
-### 権限設定
 
 
 ### Setup Bigquery for vertex
@@ -239,6 +238,7 @@ gcloud projects add-iam-policy-binding ${PROJECT_ID} \
 ```
 
 MLモデル作成
+
 Bigqueryコンソールで実行
 ```
 CREATE OR REPLACE MODEL ml_dataset.lang_model_v1
