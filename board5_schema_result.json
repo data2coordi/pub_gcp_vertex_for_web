@@ -3,6 +3,27 @@
 
 
 [
+
+  {
+    "mode": "NULLABLE", 
+    "name": "ml_generate_text_llm_result", 
+    "type": "STRING"
+  }, 
+  {
+    "mode": "NULLABLE", 
+    "name": "is_safety_filter_blocked", 
+    "type": "BOOL"
+  }, 
+  {
+    "mode": "NULLABLE", 
+    "name": "ml_generate_text_status", 
+    "type": "STRING"
+  }, 
+  {
+    "mode": "NULLABLE", 
+    "name": "prompt", 
+    "type": "STRING"
+  }, 
   {
     "mode": "REQUIRED", 
     "name": "titleid", 

@@ -1,0 +1,60 @@
+
+
+
+
+[
+
+  {
+    "mode": "REQUIRED", 
+    "name": "titleid", 
+    "type": "INTEGER"
+  }, 
+  {
+    "mode": "REQUIRED", 
+    "name": "title", 
+    "type": "STRING"
+  }, 
+  {
+    "mode": "REQUIRED", 
+    "name": "url", 
+    "type": "STRING"
+  }, 
+  {
+    "mode": "REQUIRED", 
+    "name": "post_id", 
+    "type": "STRING"
+  },
+  {
+    "mode": "REQUIRED", 
+    "name": "post_date", 
+    "type": "DATETIME"
+  }, 
+  {
+    "mode": "REQUIRED", 
+    "name": "post", 
+    "type": "STRING"
+  }, 
+  {
+    "mode": "NULLABLE", 
+    "name": "category1", 
+    "type": "STRING"
+  }, 
+  {
+    "mode": "NULLABLE", 
+    "name": "category2", 
+    "type": "STRING"
+  }, 
+  {
+    "mode": "NULLABLE", 
+    "name": "category3", 
+    "type": "STRING"
+  }, 
+  {
+    "mode": "NULLABLE", 
+    "name": "summary", 
+    "type": "STRING"
+  } 
+  ]
+
+
+
