@@ -1,5 +1,7 @@
 
 
+exit
+
 # ##機能概要
 
 掲示板系WEBサイトにはすばらしい情報があるが、スパムやテーマとは無関係の投稿も存在し利用には時間コストを要する。
@@ -16,13 +18,18 @@
 # ##最終アウトプットのイメージ
 
 
-![投稿の要約イメージ](./img/analyze_ret.jpg)
-
-上記のように投稿を分析した結果で、ユーザーの掲示板の利用を支援する。
+![Bigqueryでの検索イメージ](./img/BigqueryML_and_Python.jpg)
 
 左側の列が分類と要約結果。右側が元の投稿。
 
 SQLで**スパム**に分類された投稿は非表示にしている。
+
+上記のように投稿を分析した結果で、ユーザーの掲示板の利用を支援する。
+
+![投稿の分類イメージ](./img/提示版分類集計.jpg)
+![投稿の要旨イメージ](./img/掲示板分析詳細.jpg)
+上記はLooker studioでレポート化したもの
+
 
 # ##全体構成
 
@@ -95,6 +102,9 @@ bq query --use_legacy_sql=false 'delete from `ml_dataset.board5_result` where ti
 
 bq query --use_legacy_sql=false <board5_merge.sql
 
+#初回のみVIEW作成を実行
+#bq mk --use_legacy_sql=false --view_udf_resource=./board5_result_view.sql \
+#ml_dataset.board5_result_view
 
 exit
 
@@ -212,6 +222,11 @@ bq query --use_legacy_sql=false <board5_merge.sql
 [投入or更新をするMerge用SQL:board5_merge.sql](./board5_merge.sql)
 
 解析後にマージ文で既に存在する場合は上書き、新規の場合は投入している。
+
+## ViewによりAIの解析結果を見易くする。
+
+[View:board5_result_view.sql](./board5_result_view.sql)
+上記VIEW作成スクリプトをBigqueryのコンソールから実行する。
 
 
 # ##環境セットアップ
