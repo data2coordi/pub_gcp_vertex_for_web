@@ -153,6 +153,7 @@ python ./board5_getWeb.py
 https://ai-inter1.com/beautifulsoup_1/
 
 **ポイント:**
+
 	- 今回は5chの掲示板データのスクレイピングに特化したコードとなっている。
 	- それぞれのサイトごとにHTML、CSSの構造を解析してコーディングする必要がある。
 	HTML、CSSの構造の解析にはChromeのDeveloper toolが役立つ。
