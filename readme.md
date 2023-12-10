@@ -150,7 +150,7 @@ python ./board5_getWeb.py
 対象のデータをWEBサイトから収集して、ローカルのワークファイルに出力している。
 ライブラリとしてBeautifulSoupを使用している。下記ビジPyさんのサイトでBeautifulSoupについて分かり易く説明されている。
 
-https://ai-inter1.com/beautifulsoup_1/
+> https://ai-inter1.com/beautifulsoup_1/
 
 **ポイント:**
 
