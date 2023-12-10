@@ -118,7 +118,7 @@ bq query --use_legacy_sql=false <board5_merge.sql
 exit
 
 ```
-※ 下記でそれぞれのコードを説明している。
+※ 下記で上記のそれぞれのコードを説明している。
 
 
 
@@ -130,10 +130,6 @@ source ./private/env.sh
 ```
 
 ## 事前のワークファイルの削除
-
-
-
-
 ```
 
 rm -f ${BOARD5TMP_DIR}/${BOARD5TMP_FILE}
@@ -143,7 +139,7 @@ rm -f ${BOARD5TMP_DIR}/${BOARD5TMP_FILE}
 
 
 
-## 対象のデータをWEBサイトから収集して、ローカルのワークファイルに出力
+## Pythonでスクレイピング
 
 ```
 python ./board5_getWeb.py
@@ -151,8 +147,14 @@ python ./board5_getWeb.py
 [WEBサイトからデータを取得しCSVを生成するプログラム:board5_getWeb.py](./board5_getWeb.py)
 
 
+対象のデータをWEBサイトから収集して、ローカルのワークファイルに出力している。
+ライブラリとしてBeautifulSoupを使用している。下記ビジPyさんのサイトでBeautifulSoupに分かり易く説明されている。
 
+https://ai-inter1.com/beautifulsoup_1/
 
+今回は5chの掲示板データのスクレイピングに特化したコードとなっている。
+それぞれのサイトごとにHTML、CSSの構造を解析してコーディングする必要がある。
+HTML、CSSの構造の解析にはChromeのDeveloper toolが役立つ。
 
 
 ## 上記で取得したワークファイルをGCSにロード
@@ -178,6 +180,8 @@ ml_dataset.board5_ex
 ```
 
 [スキーマ情報:schema_5chboard.json](./schema/board5_schema.json)
+
+上記でGCSにコピーした掲示板のcsvファイルをソースとした外部テーブルを作成している。
 
 
 
@@ -205,8 +209,22 @@ for ((i=0; i<5; i++))  do
 	 --parameter='request:STRING:以下はアーリーリタイアに関する掲示板の投稿です。次のどれかに分類してください。「節税」「生活費」「投資」「資産運用」「過ごし方」「リタイア成功の条件」「リタイアのリスク」「その他」「スパム」。また分類理由を記載してください。また「スパム」以外については要旨を記載してください。 \n 投稿:' \
 	 --parameter='category:STRING:\n 分類: \n 分類理由: \n 要旨:' \
 	  <board5_analyze.sql
+	  <board5_analyze.sql
 done 
 ```
+
+[Vertex AIと連携するSQL:board5_analyze.sql](./board5_analyze.sql)
+
+**ポイント：**
+
+	- 外部テーブルからSelectしたデータをBigquery ML(Vertex AI)で解析して結果を上記で作成した
+	一時テーブルにロードしている。
+
+	- 一度に大量に処理をするとVertex AIのリソースオーバーで異常終了してしまうので分割して処理をしている。
+
+	- パラメーターでAIにプロンプトから指示する内容を渡している。内容はそれぞれの掲示板のテーマに合わせて考える必要がある。ここでは、分類と要約をお願いしている。
+
+	- NOT EXISTS句で既に処理したデータはスキップしている。効率的ではないがそれほど大量データではないので保守性を考えるとこの方式が良いと判断した。
 
 
 ## 解析結果を蓄積するテーブルを作成
@@ -221,6 +239,8 @@ bq mk -t --schema ./schema/board5_schema_result.json \
   ml_dataset.board5_result
 ```
 
+解析結果を蓄積することから大量データとなる可能性がある。対策としてパーティションテーブルを採用している。
+パーティションキーは上記のスクレイピングで掲示板タイトルからハッシュ関数で生成したTitleidとしている。
 
 ## 解析結果をテーブルにマージで投入or更新
 
@@ -230,12 +250,16 @@ bq query --use_legacy_sql=false <board5_merge.sql
 
 [投入or更新をするMerge用SQL:board5_merge.sql](./board5_merge.sql)
 
-解析後にマージ文で既に存在する場合は上書き、新規の場合は投入している。
+マージ文で既に存在する場合は上書き、新規の場合は投入している。
 
 ## ViewによりAIの解析結果を見易くする。
 
 [View:board5_result_view.sql](./board5_result_view.sql)
+
 上記VIEW作成スクリプトをBigqueryのコンソールから実行する。
+
+AIが出力した情報には統一性がなかったり、余分な文字が含まれていたりする。
+レポート化し易いようにこれらをBigqueryの正規表現を使って補正している。
 
 
 # ##環境セットアップ
