@@ -16,7 +16,7 @@
 # ##最終アウトプットのイメージ
 
 
-![投稿の要約イメージ](./analyze_ret.jpg)
+![投稿の要約イメージ](./img/analyze_ret.jpg)
 
 上記のように投稿を分析した結果で、ユーザーの掲示板の利用を支援する。
 
@@ -26,7 +26,7 @@ SQLで**スパム**に分類された投稿は非表示にしている。
 
 # ##全体構成
 
-![全体概要](./BigqueryML_and_Python.jpg)
+![全体概要](./img/BigqueryML_and_Python.jpg)
 
 テクノロジーとしては**Python**、**GCP**の**Bigquery**、**Vertex AI** を利用している。
 
@@ -63,13 +63,13 @@ gsutil cp ${BOARD5TMP_DIR}/${BOARD5TMP_FILE} ${BOARD5GCS_DIR}
 
 #初回のみテーブル作成を実行
 #bq rm -t ml_dataset.board5_ex
-#bq mk -t --schema board5_schema.json \
+#bq mk -t --schema ./schema/board5_schema.json \
 #--external_table_definition=${BOARD5GCS_DIR}/${BOARD5TMP_FILE}  \
 #ml_dataset.board5_ex
 
 #初回のみテーブル作成を実行
 #bq rm -t ml_dataset.board5_analyze_tmp
-#bq mk -t --schema board5_schema_result.json \
+#bq mk -t --schema ./schema/board5_schema_result.json \
   #ml_dataset.board5_analyze_tmp
 
 bq query --use_legacy_sql=false 'delete from `ml_dataset.board5_analyze_tmp` where 1=1'
@@ -84,7 +84,7 @@ done
 
 #初回のみテーブル作成を実行
 #bq rm -t ml_dataset.board5_result
-#bq mk -t --schema board5_schema_result.json \
+#bq mk -t --schema ./schema/board5_schema_result.json \
 #--require_partition_filter=true  \
 #--range_partitioning=titleid,0,1000,1 \
 #ml_dataset.board5_result
@@ -153,12 +153,12 @@ gsutil cp ${BOARD5TMP_DIR}/${BOARD5TMP_FILE} ${BOARD5GCS_DIR}
 ```
 
 bq rm -t ml_dataset.board5_ex
-bq mk -t --schema board5_schema.json \
+bq mk -t --schema ./schema/board5_schema.json \
 --external_table_definition=${BOARD5GCS_DIR}/${BOARD5TMP_FILE}  \
 ml_dataset.board5_ex
 ```
 
-[スキーマ情報:schema_5chboard.json](./schema_5chboard.json)
+[スキーマ情報:schema_5chboard.json](./schema/board5_schema.json)
 
 
 
@@ -168,11 +168,11 @@ ml_dataset.board5_ex
 
 ```
 bq rm -t ml_dataset.board5_analyze_tmp
-bq mk -t --schema board5_schema_result.json \
+bq mk -t --schema ./schema/board5_schema_result.json \
   ml_dataset.board5_analyze_tmp
 ```
 
-[スキーマ情報:board5_schema_result.json](./board5_schema_result.json)
+[スキーマ情報:board5_schema_result.json](./schema/board5_schema_result.json)
 
 
 ## Bigquery MLで 解析実行とワークテーブルに投入
@@ -196,7 +196,7 @@ done
 
 ```
 bq rm -t ml_dataset.board5_result
-bq mk -t --schema board5_schema_result.json \
+bq mk -t --schema ./schema/board5_schema_result.json \
   --require_partition_filter=true  \
   --range_partitioning=titleid,0,1000,1 \
   ml_dataset.board5_result
