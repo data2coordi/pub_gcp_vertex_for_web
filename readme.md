@@ -1,52 +1,4 @@
 
-source ./private/env.sh
-
-rm -f ${BOARD5TMP_DIR}/${BOARD5TMP_FILE}
-
-python ./board5_getWeb.py
-
-gsutil cp ${BOARD5TMP_DIR}/${BOARD5TMP_FILE} ${BOARD5GCS_DIR}
-
-#bq rm -t ml_dataset.board5_ex
-#bq mk -t --schema board5_schema.json \
-#--external_table_definition=${BOARD5GCS_DIR}/${BOARD5TMP_FILE}  \
-#ml_dataset.board5_ex
-
-#bq rm -t ml_dataset.board5_analyze_tmp
-#bq mk -t --schema board5_schema_result.json \
-#  ml_dataset.board5_analyze_tmp
-
-bq query --use_legacy_sql=false 'delete from `ml_dataset.board5_analyze_tmp` where 1=1'
-for ((i=0; i<1; i++))  do  
-	bq query --use_legacy_sql=false   \
-	 --parameter='mlimit:INT64:100' \
-	 --parameter='disc:STRING:以下は日経平均株価に関する掲示板の投稿です。\n      投稿:' \
-	 --parameter='request:STRING:\n     投稿を次のどれかに分類してください。「景気」「政策」「経済理論」「投資理論」「今後の見通し」「その他」「スパム」。また分類理由を記載してください。また「スパム」以外については投稿の要旨を記載してください。 ' \
-	 --parameter='answer:STRING:\n      分類: \n 分類理由: \n 要旨:' \
-	  <board5_analyze.sql
-done 
-exit
-#
-#bq rm -t ml_dataset.board5_result
-#bq mk -t --schema board5_schema_result.json \
-#--require_partition_filter=true  \
-#--range_partitioning=titleid,0,1000,1 \
-#ml_dataset.board5_result
-
-
-bq query --use_legacy_sql=false 'delete from `ml_dataset.board5_result` where titleid < 100000000'
-bq query --use_legacy_sql=false <board5_merge.sql
-
-
-
-
-
-
-exit
-exit
-exit
-exit
-exit
 
 # 機能概要
 
@@ -104,11 +56,13 @@ python ./board5_getWeb.py
 
 gsutil cp ${BOARD5TMP_DIR}/${BOARD5TMP_FILE} ${BOARD5GCS_DIR}
 
+#初回のみテーブル作成を実行
 #bq rm -t ml_dataset.board5_ex
 #bq mk -t --schema board5_schema.json \
 #--external_table_definition=${BOARD5GCS_DIR}/${BOARD5TMP_FILE}  \
 #ml_dataset.board5_ex
 
+#初回のみテーブル作成を実行
 #bq rm -t ml_dataset.board5_analyze_tmp
 #bq mk -t --schema board5_schema_result.json \
   #ml_dataset.board5_analyze_tmp
@@ -123,6 +77,7 @@ for ((i=0; i<1; i++))  do
 	  <board5_analyze.sql
 done 
 
+#初回のみテーブル作成を実行
 #bq rm -t ml_dataset.board5_result
 #bq mk -t --schema board5_schema_result.json \
 #--require_partition_filter=true  \
@@ -130,7 +85,9 @@ done
 #ml_dataset.board5_result
 
 
+#データをクリアしたいときのみ
 bq query --use_legacy_sql=false 'delete from `ml_dataset.board5_result` where titleid < 100000000'
+
 bq query --use_legacy_sql=false <board5_merge.sql
 
 
