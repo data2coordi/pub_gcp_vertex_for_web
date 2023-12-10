@@ -18,7 +18,7 @@ exit
 # ##最終アウトプットのイメージ
 
 
-![Bigqueryでの検索イメージ](./img/BigqueryML_and_Python.jpg)
+![Bigqueryでの検索イメージ](./img/analyze_ret.jpg)
 
 左側の列が分類と要約結果。右側が元の投稿。
 
