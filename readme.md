@@ -35,9 +35,9 @@ SQLで**スパム**に分類された投稿は非表示にしている。
 ![投稿の要旨イメージ](./img/掲示板分析詳細.jpg)
 
 
-# ##全体構成
+# ##システム構成
 
-![全体概要](./img/BigqueryML_and_Python.jpg)
+![システム](./img/BigqueryML_and_Python.jpg)
 
 テクノロジーとしては**Python**、**GCP**の**Bigquery**、**Vertex AI** を利用している。
 
