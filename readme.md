@@ -55,7 +55,7 @@ SQLで**スパム**に分類された投稿は非表示にしている。
 使用しているAI機能については下記サイト(G-genさん)を参考にしているので必要に応じて参照してほしい。
 ※ 非常にわかりやすいです。
 
-https://blog.g-gen.co.jp/entry/using-palm2-with-bigquery-ml
+> https://blog.g-gen.co.jp/entry/using-palm2-with-bigquery-ml
 
 ## WEBからのデータ抽出について
 個人的利用のためのデータ抽出は法律で許可されていますが、それを公開することは許可されていないので、個人利用に留めてください。
