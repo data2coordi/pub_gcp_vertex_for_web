@@ -1,6 +1,6 @@
 
 
-# 機能概要
+# ##機能概要
 
 掲示板系WEBサイトにはすばらしい情報があるが、スパムやテーマとは無関係の投稿も存在し利用には時間コストを要する。
 本システムはGCPのBigqueryとVertex AIを使って以下のように問題を軽減することを目的としている。
@@ -27,7 +27,7 @@
 
 
 # 前提
-### 基本技術の説明について
+## 基本技術の説明について
 ここでは基本的な技術要素については記載していない。
 ※ 主に自身のポートフォリオを目的に作成しています。
 
@@ -36,7 +36,7 @@
 
 https://blog.g-gen.co.jp/entry/using-palm2-with-bigquery-ml
 
-### WEBからのデータ抽出について
+## WEBからのデータ抽出について
 個人的利用のためのデータ抽出は法律で許可されていますが、それを公開することは許可されていないので、個人利用に留めてください。
 抽出したデータ（および加工後のデータ）を公開する場合はWEBサイトの所有者に許可を取る必要があります。
 
@@ -44,7 +44,7 @@ https://blog.g-gen.co.jp/entry/using-palm2-with-bigquery-ml
 
 # 処理プロセス
 
-### 処理コード全体（bashのスクリプト)
+## 処理コード全体（bashのスクリプト)
 ```
 #!/bin/bash
 
@@ -98,14 +98,14 @@ exit
 
 
 
-### 環境変数の設定
+## 環境変数の設定
 セキュリティ、保守性を考慮し環境変数を外から読み込む。
 以降で使用されている変数にはここで読み込んだ値が反映される。
 ```
 source ./private/env.sh
 ```
 
-### 事前のワークファイルの削除
+## 事前のワークファイルの削除
 
 
 
@@ -119,7 +119,7 @@ rm -f ${BOARD5TMP_DIR}/${BOARD5TMP_FILE}
 
 
 
-### 対象のデータをWEBサイトから収集して、ローカルのワークファイルに出力
+## 対象のデータをWEBサイトから収集して、ローカルのワークファイルに出力
 
 ```
 python ./board5_getWeb.py
@@ -131,7 +131,7 @@ python ./board5_getWeb.py
 
 
 
-### 上記で取得したワークファイルをGCSにロード
+## 上記で取得したワークファイルをGCSにロード
 ```
 gsutil cp ${BOARD5TMP_DIR}/${BOARD5TMP_FILE} ${BOARD5GCS_DIR}
 ```
@@ -140,7 +140,7 @@ gsutil cp ${BOARD5TMP_DIR}/${BOARD5TMP_FILE} ${BOARD5GCS_DIR}
 
 
 
-### Bigqueryの外部データ連携機能でGCSのワークファイルを直接参照する外部テーブルを作成する。
+## Bigqueryの外部データ連携機能でGCSのワークファイルを直接参照する外部テーブルを作成する。
 
 下記のスキーマ情報から外部テーブルを作成する。
 
@@ -157,7 +157,7 @@ ml_dataset.board5_ex
 
 
 
-### 解析結果を一時補完するワークテーブルを作成
+## 解析結果を一時補完するワークテーブルを作成
 
 ※ 1回目のみ実行する。
 
@@ -170,7 +170,7 @@ bq mk -t --schema board5_schema_result.json \
 [スキーマ情報:board5_schema_result.json](./board5_schema_result.json)
 
 
-### Bigquery MLで 解析実行とワークテーブルに投入
+## Bigquery MLで 解析実行とワークテーブルに投入
 
 ```
 bq query --use_legacy_sql=false 'delete from `ml_dataset.board5_analyze_tmp` where 1=1'
@@ -185,7 +185,7 @@ done
 ```
 
 
-### 解析結果を蓄積するテーブルを作成
+## 解析結果を蓄積するテーブルを作成
 
 ※ 1回目のみ実行する。
 
@@ -198,7 +198,7 @@ bq mk -t --schema board5_schema_result.json \
 ```
 
 
-### 解析結果をテーブルにマージで投入or更新
+## 解析結果をテーブルにマージで投入or更新
 
 ```
 bq query --use_legacy_sql=false <board5_merge.sql
@@ -209,12 +209,12 @@ bq query --use_legacy_sql=false <board5_merge.sql
 解析後にマージ文で既に存在する場合は上書き、新規の場合は投入している。
 
 
-# 環境セットアップ
+# ##環境セットアップ
 Centos9にPythonの実行環境、GCPにBigquery MLの実行環境を構築する。
 尚、Python、Google cloud sdk の基本的なセットアップは完了していることを前提としている。
 
 
-### Setup Python virtul env 
+## Setup Python virtul env 
 ```
 cd ../env
 python3.9 -m venv scraping
@@ -230,7 +230,7 @@ deactivate
 
 ```
 
-### Python debug
+## Python debug
 
 デバッグのコードも記載しておく
 
@@ -246,7 +246,7 @@ python -m pdb  exsample.py
 
 
 
-### Setup Bigquery for vertex
+## Setup Bigquery for vertex
 
 Connection を作成する
 ```
