@@ -159,7 +159,7 @@ python ./board5_getWeb.py
 下記ビジPyさんのサイトでBeautifulSoupについて分かり易く説明されている。
 > https://ai-inter1.com/beautifulsoup_1/
 
-   
+<br><br><br><br><br><br> 
    
    
    
