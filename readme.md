@@ -148,7 +148,7 @@ python ./board5_getWeb.py
 
 
 対象のデータをWEBサイトから収集して、ローカルのワークファイルに出力している。
-ライブラリとしてBeautifulSoupを使用している。
+ライブラリとして**BeautifulSoup**を使用している。
 
 **ポイント:**
 
@@ -170,18 +170,14 @@ python ./board5_getWeb.py
 gsutil cp ${BOARD5TMP_DIR}/${BOARD5TMP_FILE} ${BOARD5GCS_DIR}
   
 ```
-  
-  
-  
+<br><br><br> 
   
   
 ## Bigqueryの外部データ連携機能でGCSのワークファイルを直接参照する外部テーブルを作成する。
 
-下記のスキーマ情報から外部テーブルを作成する。
 
 ※ 1回目のみ実行する。
 ```
-
 bq rm -t ml_dataset.board5_ex
 bq mk -t --schema ./schema/board5_schema.json \
 --external_table_definition=${BOARD5GCS_DIR}/${BOARD5TMP_FILE}  \
@@ -190,9 +186,11 @@ ml_dataset.board5_ex
 
 [スキーマ情報:schema_5chboard.json](./schema/board5_schema.json)
 
+スキーマ情報から外部テーブルを作成する。
 上記でGCSにコピーした掲示板のcsvファイルをソースとした外部テーブルを作成している。
 
 
+<br><br><br> 
 
 ## 解析結果を一時補完するワークテーブルを作成
 
