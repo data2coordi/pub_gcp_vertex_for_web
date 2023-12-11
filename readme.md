@@ -148,26 +148,32 @@ python ./board5_getWeb.py
 
 
 対象のデータをWEBサイトから収集して、ローカルのワークファイルに出力している。
-ライブラリとしてBeautifulSoupを使用している。下記ビジPyさんのサイトでBeautifulSoupについて分かり易く説明されている。
-
-> https://ai-inter1.com/beautifulsoup_1/
+ライブラリとしてBeautifulSoupを使用している。
 
 **ポイント:**
 
 	- 今回は5chの掲示板データのスクレイピングに特化したコードとなっている。
 	- それぞれのサイトごとにHTML、CSSの構造を解析してコーディングする必要がある。
-	HTML、CSSの構造の解析にはChromeのDeveloper toolが役立つ。
+	- HTML、CSSの構造の解析にはChromeのDeveloper toolが役立つ。
 
+下記ビジPyさんのサイトでBeautifulSoupについて分かり易く説明されている。
+> https://ai-inter1.com/beautifulsoup_1/
 
+  
+  
+  
+  
+  
 ## 上記で取得したワークファイルをGCSにロード
 ```
 gsutil cp ${BOARD5TMP_DIR}/${BOARD5TMP_FILE} ${BOARD5GCS_DIR}
+  
 ```
-
-
-
-
-
+  
+  
+  
+  
+  
 ## Bigqueryの外部データ連携機能でGCSのワークファイルを直接参照する外部テーブルを作成する。
 
 下記のスキーマ情報から外部テーブルを作成する。
