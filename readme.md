@@ -81,27 +81,31 @@ SQLで**スパム**に分類された投稿は非表示にしている。
 ```
 #!/bin/bash
 
+#環境変数読み込み
 source ./private/env.sh
 
 rm -f ${BOARD5TMP_DIR}/${BOARD5TMP_FILE}
 
+#WEBスクレイピング
 python ./board5_getWeb.py
 
+#GCSにWEBサイトのデータをアップロード
 gsutil cp ${BOARD5TMP_DIR}/${BOARD5TMP_FILE} ${BOARD5GCS_DIR}
 
-#初回のみテーブル作成を実行
+#初回のみ外部テーブル作成を実行
 #bq rm -t ml_dataset.board5_ex
 #bq mk -t --schema ./schema/board5_schema.json \
 #--external_table_definition=${BOARD5GCS_DIR}/${BOARD5TMP_FILE}  \
 #ml_dataset.board5_ex
 
-#初回のみテーブル作成を実行
+#初回のみ一時保管用テーブル作成を実行
 #bq rm -t ml_dataset.board5_analyze_tmp
 #bq mk -t --schema ./schema/board5_schema_result.json \
-  #ml_dataset.board5_analyze_tmp
+#ml_dataset.board5_analyze_tmp
 
+#Bigquery+VertexAIで解析。分割して実行するためfor文で繰り返し。
 bq query --use_legacy_sql=false 'delete from `ml_dataset.board5_analyze_tmp` where 1=1'
-for ((i=0; i<1; i++))  do  
+for ((i=0; i<10; i++))  do  
 	bq query --use_legacy_sql=false   \
 	 --parameter='mlimit:INT64:100' \
 	 --parameter='disc:STRING:以下は日経平均株価に関する掲示板の投稿です。\n      投稿:' \
@@ -110,7 +114,7 @@ for ((i=0; i<1; i++))  do
 	  <board5_analyze.sql
 done 
 
-#初回のみテーブル作成を実行
+#初回のみ蓄積用テーブル作成を実行
 #bq rm -t ml_dataset.board5_result
 #bq mk -t --schema ./schema/board5_schema_result.json \
 #--require_partition_filter=true  \
@@ -121,6 +125,7 @@ done
 #データをクリアしたいときのみ
 bq query --use_legacy_sql=false 'delete from `ml_dataset.board5_result` where titleid < 100000000'
 
+#蓄積用テーブルにマージロード。既に存在する場合は更新のみ。
 bq query --use_legacy_sql=false <board5_merge.sql
 
 #初回のみVIEW作成を実行 ※ bigqueryのコンソールから作成する。
@@ -222,9 +227,9 @@ bq mk -t --schema ./schema/board5_schema_result.json \
 ```
 bq query --use_legacy_sql=false 'delete from `ml_dataset.board5_analyze_tmp` where 1=1'
 
-for ((i=0; i<5; i++))  do  
+for ((i=0; i<10; i++))  do  
 	bq query --use_legacy_sql=false   \
-	 --parameter='mlimit:INT64:10' \
+	 --parameter='mlimit:INT64:100' \
 	 --parameter='request:STRING:以下はアーリーリタイアに関する掲示板の投稿です。次のどれかに分類してください。「節税」「生活費」「投資」「資産運用」「過ごし方」「リタイア成功の条件」「リタイアのリスク」「その他」「スパム」。また分類理由を記載してください。また「スパム」以外については要旨を記載してください。 \n 投稿:' \
 	 --parameter='category:STRING:\n 分類: \n 分類理由: \n 要旨:' \
 	  <board5_analyze.sql
@@ -239,7 +244,7 @@ done
 - 外部テーブルからSelectしたデータをBigquery ML(Vertex AI)で解析して結果を上記で作成した
 一時テーブルにロードしている。
 - 一度に大量に処理をするとVertex AIのリソースオーバーで異常終了してしまうので分割して処理をしている。
-- パラメーターでAIにプロンプトから指示する内容を渡している。内容はそれぞれの掲示板のテーマに合わせて考える必要がある。ここでは、分類と要約をお願いしている。
+- パラメーターでAIにプロンプトから指示する内容を渡している。内容はそれぞれの掲示板のテーマに合わせて考える必要がある。ここでは、AIに分類と要約を指示している。
 - NOT EXISTS句で既に処理したデータはスキップしている。効率的ではないがそれほど大量データではないので保守性を考えるとこの方式が良いと判断した。
 
 <br><br><br> 
