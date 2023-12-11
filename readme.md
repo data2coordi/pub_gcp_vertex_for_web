@@ -123,9 +123,8 @@ bq query --use_legacy_sql=false 'delete from `ml_dataset.board5_result` where ti
 
 bq query --use_legacy_sql=false <board5_merge.sql
 
-#初回のみVIEW作成を実行
-#bq mk --use_legacy_sql=false --view_udf_resource=./board5_result_view.sql \
-#ml_dataset.board5_result_view
+#初回のみVIEW作成を実行 ※ bigqueryのコンソールから作成する。
+#board5_result_view.sql 
 
 exit
 
