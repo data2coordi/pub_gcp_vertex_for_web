@@ -156,6 +156,7 @@ rm -f ${BOARD5TMP_DIR}/${BOARD5TMP_FILE}
 python ./board5_getWeb.py
 ```
 [board5_getWeb.py](./board5_getWeb.py)
+(./board5_getWeb.py)
 
 
 対象のデータをWEBサイトから収集して、ローカルのワークファイルに出力している。
