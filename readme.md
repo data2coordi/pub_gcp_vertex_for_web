@@ -255,7 +255,8 @@ bq mk -t --schema ./schema/board5_schema_result.json \
   --range_partitioning=titleid,0,1000,1 \
   ml_dataset.board5_result
 ```
-**ポイント**
+**ポイント** 
+
 	- 解析結果を蓄積することから大量データとなる可能性がある。対策としてパーティションテーブルを採用している。
 	- パーティションキーは上記のスクレイピングで掲示板タイトルからハッシュ関数で生成したTitleidとしている。
 
