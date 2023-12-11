@@ -159,11 +159,12 @@ python ./board5_getWeb.py
 下記ビジPyさんのサイトでBeautifulSoupについて分かり易く説明されている。
 > https://ai-inter1.com/beautifulsoup_1/
 
-  
-  
-  
-  
-  
+   
+   
+   
+   
+   
+   
 ## 上記で取得したワークファイルをGCSにロード
 ```
 gsutil cp ${BOARD5TMP_DIR}/${BOARD5TMP_FILE} ${BOARD5GCS_DIR}
