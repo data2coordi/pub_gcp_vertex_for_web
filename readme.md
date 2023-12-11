@@ -163,9 +163,9 @@ python ./board5_getWeb.py
 
 **ポイント:**
 
-	- 今回は5chの掲示板データのスクレイピングに特化したコードとなっている。
-	- それぞれのサイトごとにHTML、CSSの構造を解析してコーディングする必要がある。
-	- HTML、CSSの構造の解析にはChromeのDeveloper toolが役立つ。
+- 今回は5chの掲示板データのスクレイピングに特化したコードとなっている。
+- それぞれのサイトごとにHTML、CSSの構造を解析してコーディングする必要がある。
+- HTML、CSSの構造の解析にはChromeのDeveloper toolが役立つ。
 
 下記ビジPyさんのサイトでBeautifulSoupについて分かり易く説明されている。
 > https://ai-inter1.com/beautifulsoup_1/
