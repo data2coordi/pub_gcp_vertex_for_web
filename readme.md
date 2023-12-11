@@ -176,7 +176,7 @@ gsutil cp ${BOARD5TMP_DIR}/${BOARD5TMP_FILE} ${BOARD5GCS_DIR}
 ## Bigqueryの外部データ連携機能でGCSのワークファイルを直接参照する外部テーブルを作成する。
 
 
-※ 1回目のみ実行する。
+※ 初回のみ実行する。
 ```
 bq rm -t ml_dataset.board5_ex
 bq mk -t --schema ./schema/board5_schema.json \
@@ -194,7 +194,7 @@ ml_dataset.board5_ex
 
 ## 解析結果を一時補完するワークテーブルを作成
 
-※ 1回目のみ実行する。
+※ 初回のみ実行する。
 
 ```
 bq rm -t ml_dataset.board5_analyze_tmp
@@ -204,6 +204,7 @@ bq mk -t --schema ./schema/board5_schema_result.json \
 
 [スキーマ情報:board5_schema_result.json](./schema/board5_schema_result.json)
 
+<br><br><br> 
 
 ## Bigquery MLで 解析実行とワークテーブルに投入
 
@@ -233,10 +234,11 @@ done
 
 	- NOT EXISTS句で既に処理したデータはスキップしている。効率的ではないがそれほど大量データではないので保守性を考えるとこの方式が良いと判断した。
 
+<br><br><br> 
 
 ## 解析結果を蓄積するテーブルを作成
 
-※ 1回目のみ実行する。
+※ 初回のみ実行する。
 
 ```
 bq rm -t ml_dataset.board5_result
@@ -245,10 +247,11 @@ bq mk -t --schema ./schema/board5_schema_result.json \
   --range_partitioning=titleid,0,1000,1 \
   ml_dataset.board5_result
 ```
+**ポイント**
+	- 解析結果を蓄積することから大量データとなる可能性がある。対策としてパーティションテーブルを採用している。
+	- パーティションキーは上記のスクレイピングで掲示板タイトルからハッシュ関数で生成したTitleidとしている。
 
-解析結果を蓄積することから大量データとなる可能性がある。対策としてパーティションテーブルを採用している。
-パーティションキーは上記のスクレイピングで掲示板タイトルからハッシュ関数で生成したTitleidとしている。
-
+<br><br><br> 
 ## 解析結果をテーブルにマージで投入or更新
 
 ```
@@ -259,6 +262,10 @@ bq query --use_legacy_sql=false <board5_merge.sql
 
 マージ文で既に存在する場合は上書き、新規の場合は投入している。
 
+**ポイント**
+	- マージ分で対象を絞り込むときにBigqueryはインデックスが使えない。ここでパーティションが負荷軽減に貢献する。
+
+<br><br><br> 
 ## ViewによりAIの解析結果を見易くする。
 
 [View:board5_result_view.sql](./board5_result_view.sql)
@@ -269,6 +276,9 @@ AIが出力した情報には統一性がなかったり、余分な文字が含
 レポート化し易いようにこれらをBigqueryの正規表現を使って補正している。
 
 
+<br><br><br> 
+<br><br><br> 
+<br><br><br> 
 # ##環境セットアップ
 Centos9にPythonの実行環境、GCPにBigquery MLの実行環境を構築する。
 尚、Python、Google cloud sdk の基本的なセットアップは完了していることを前提としている。
