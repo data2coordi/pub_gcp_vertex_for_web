@@ -122,7 +122,7 @@ done
 #ml_dataset.board5_result
 
 
-#データをクリアしたいときのみ
+#蓄積用テーブルをクリアしたいときのみ実行
 bq query --use_legacy_sql=false 'delete from `ml_dataset.board5_result` where titleid < 100000000'
 
 #蓄積用テーブルにマージロード。既に存在する場合は更新のみ。
