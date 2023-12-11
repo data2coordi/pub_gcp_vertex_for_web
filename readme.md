@@ -349,9 +349,7 @@ gcloud projects add-iam-policy-binding ${PROJECT_ID} \
     --role="roles/aiplatform.user"
 ```
 
-MLモデル作成
-
-Bigqueryコンソールで実行
+MLモデル作成。Bigqueryコンソールで実行する。
 ```
 CREATE OR REPLACE MODEL ml_dataset.lang_model_v1
   REMOTE WITH CONNECTION `us-central1.con-pro-ml-for-bq`
